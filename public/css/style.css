@@ -2189,12 +2189,23 @@ h6 .badge {
   color: #6c757d;
 }
 
-a.dropdown-item {
+a.dropdown-item,
+button.dropdown-item {
   padding: 10px 20px;
   font-weight: 500;
   line-height: 1.2;
 }
-a.dropdown-item:focus, a.dropdown-item:active, a.dropdown-item.active {
+button.dropdown-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+a.dropdown-item:focus, a.dropdown-item:active, a.dropdown-item.active,
+button.dropdown-item:focus, button.dropdown-item:active {
   background-color: #6777ef;
   color: #fff !important;
 }
