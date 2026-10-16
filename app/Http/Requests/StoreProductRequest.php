@@ -18,6 +18,16 @@ class StoreProductRequest extends FormRequest
     }
 
     /**
+     * Apply default values for fields that were not filled in.
+     */
+    protected function prepareForValidation(): void
+    {
+        if (! $this->filled('status')) {
+            $this->merge(['status' => 'published']);
+        }
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, ValidationRule|array<mixed>|string>
@@ -26,14 +36,14 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
             'price' => ['required', 'integer', 'min:1'],
             'stock' => ['required', 'integer', 'min:0'],
             'category_id' => ['required', 'exists:categories,id'],
-            'image' => ['required', 'image'],
-            'status' => ['required', Rule::in(['draft', 'published', 'archived'])],
+            'image' => ['nullable', 'image'],
+            'status' => ['nullable', Rule::in(['draft', 'published', 'archived'])],
             'criteria' => ['required', Rule::in(['perorangan', 'rombongan'])],
-            'favorite' => ['boolean']
+            'favorite' => ['boolean'],
         ];
     }
 }

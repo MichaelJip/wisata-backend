@@ -22,7 +22,7 @@ class ProductController extends Controller
         $perPage = min(max($request->integer('per_page', 10), 1), 100);
         $products = Product::query()
             ->with('category')
-            ->when($request->filled('keyword'), fn($q) => $q->where('name', 'like', "%{$request->keyword}%"))
+            ->when($request->filled('keyword'), fn ($q) => $q->where('name', 'like', "%{$request->keyword}%"))
             ->latest('id')
             ->paginate($perPage);
 
@@ -35,7 +35,9 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request): JsonResponse
     {
         $validated = $request->validated();
-        $validated['image'] = $request->file('image')->store('products', 'public');
+        if ($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('products', 'public');
+        }
 
         $product = Product::create($validated)->load('category');
 

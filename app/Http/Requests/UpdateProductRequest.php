@@ -17,6 +17,13 @@ class UpdateProductRequest extends FormRequest
         return $this->user()?->role === 'admin';
     }
 
+    protected function prepareForValidation(): void
+    {
+        if (! $this->filled('status')) {
+            $this->merge(['status' => 'published']);
+        }
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,14 +33,14 @@ class UpdateProductRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
             'price' => ['required', 'integer', 'min:1'],
             'stock' => ['required', 'integer', 'min:0'],
             'category_id' => ['required', 'exists:categories,id'],
             'image' => ['nullable', 'image'],
-            'status' => ['required', Rule::in(['draft', 'published', 'archived'])],
+            'status' => ['nullable', Rule::in(['draft', 'published', 'archived'])],
             'criteria' => ['required', Rule::in(['perorangan', 'rombongan'])],
-            'favorite' => ['boolean']
+            'favorite' => ['boolean'],
         ];
     }
 }
